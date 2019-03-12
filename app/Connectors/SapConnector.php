@@ -16,8 +16,8 @@ class SapConnector {
 
     /**
      * SapConnector constructor.
-     *
      * @param array $configs
+     * @throws Exception
      */
     public function __construct(array $configs = array()) {
 		try {
@@ -58,9 +58,6 @@ class SapConnector {
     protected function set_error($errCode) {
         $this->sapCom->GetLastError($errCode, $this->errMsg);
 
-        var_dump($this->errMsg);
-        die();
-
         if ($this->errMsg == '') {
             $this->errMsg = $this->sapCom->GetLastErrorDescription();
         }
@@ -89,9 +86,27 @@ class SapConnector {
         return $this;
     }
 
-    public function insert() {
+    public function insert($data) {
+        try {
+            foreach ($data as $key => $value) {
+                $this->set_properties($key, $value);
+            }
 
+            $RetCode = $this->businessObj->add();
+
+            if ($RetCode == 0) {
+                return $this->sapCom->GetNewObjectKey();
+            } else {
+                throw new Exception($this->get_error($RetCode));
+            }
+        } catch (com_exception $e) {
+            throw new $e;
+        }
     }
 
     public function update() {}
+
+    private function set_properties ($key, $value) {
+        $this->businessObj->$key = $value;
+    }
 }

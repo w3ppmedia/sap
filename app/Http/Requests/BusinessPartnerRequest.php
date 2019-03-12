@@ -11,8 +11,9 @@ class BusinessPartnerRequest extends ApiRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'description' => 'required'
+            'id' => '',
+            'cardCode' => 'required',
+            'cardName' => ''
         ];
     }
 }
