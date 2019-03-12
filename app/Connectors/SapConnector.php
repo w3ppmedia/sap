@@ -1,6 +1,6 @@
 <?php namespace App\Connectors;
 
-use mysql_xdevapi\Exception;
+use Exception;
 
 class SapConnector {
 
@@ -23,18 +23,16 @@ class SapConnector {
 		try {
 			$this->sapCom = new \COM("SAPbobsCOM.company") or die ("No connection");
 
-			if ($this->sapCom instanceof \stdClass) {
-                $this->sapCom->server = "SAPSERVER";
-                $this->sapCom->CompanyDB = $configs['companyDb'];
-                $this->sapCom->username = $configs['username'];
-                $this->sapCom->password = $configs['password'];
-                $this->sapCom->DbServerType = "6";
-            }
+            $this->sapCom->DbServerType = "6";
+            $this->sapCom->server = "SAPSERVER";
+            $this->sapCom->CompanyDB = $configs['database'];
+            $this->sapCom->username = $configs['username'];
+            $this->sapCom->password = $configs['password'];
 
 			$lRetCode = $this->sapCom->Connect;
 
 			if ($lRetCode != 0) {
-				throw new Exception($this->get_error());
+				throw new Exception($this->get_error($lRetCode));
 			}
 
 		} catch (com_exception $e) {
@@ -59,6 +57,9 @@ class SapConnector {
      */
     protected function set_error($errCode) {
         $this->sapCom->GetLastError($errCode, $this->errMsg);
+
+        var_dump($this->errMsg);
+        die();
 
         if ($this->errMsg == '') {
             $this->errMsg = $this->sapCom->GetLastErrorDescription();
