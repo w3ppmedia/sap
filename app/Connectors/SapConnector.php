@@ -97,7 +97,7 @@ class SapConnector {
             if ($RetCode == 0) {
                 return $this->sapCom->GetNewObjectKey();
             } else {
-                throw new Exception($this->get_error($RetCode));
+                throw new Exception($this->getError($RetCode));
             }
         } catch (com_exception $e) {
             throw new $e;
