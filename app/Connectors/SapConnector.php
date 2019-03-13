@@ -32,7 +32,7 @@ class SapConnector {
 			$lRetCode = $this->sapCom->Connect;
 
 			if ($lRetCode != 0) {
-				throw new Exception($this->get_error($lRetCode));
+				throw new Exception($this->getError($lRetCode));
 			}
 
 		} catch (com_exception $e) {
@@ -44,9 +44,9 @@ class SapConnector {
      * @param int $errCode
      * @return string
      */
-    public function get_error($errCode = 0) {
+    public function getError($errCode = 0) {
         if ($this->errMsg == '') {
-            $this->set_error($errCode);
+            $this->setError($errCode);
         }
 
         return $this->errMsg;
@@ -55,7 +55,7 @@ class SapConnector {
     /**
      * @param $errCode
      */
-    protected function set_error($errCode) {
+    protected function setError($errCode) {
         $this->sapCom->GetLastError($errCode, $this->errMsg);
 
         if ($this->errMsg == '') {
@@ -89,7 +89,7 @@ class SapConnector {
     public function insert($data) {
         try {
             foreach ($data as $key => $value) {
-                $this->set_properties($key, $value);
+                $this->setProperties($key, $value);
             }
 
             $RetCode = $this->businessObj->add();
@@ -106,7 +106,21 @@ class SapConnector {
 
     public function update() {}
 
-    private function set_properties ($key, $value) {
-        $this->businessObj->$key = $value;
+    private function setProperties ($key, $value, $parent = null) {
+        if (is_array($value)) {
+            $parent = $key;
+
+            foreach ($value as $line) {
+                foreach ($line as $key => $item) {
+                    $this->setProperties($key, $item, $parent);
+                }
+            }
+        }
+
+        if (is_null($parent)) {
+            $this->businessObj->$key = $value;
+        } else {
+            $this->businessObj->$parent->$key = $value;
+        }
     }
 }
