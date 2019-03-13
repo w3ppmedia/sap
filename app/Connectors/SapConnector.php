@@ -118,6 +118,7 @@ class SapConnector {
                 }
 
                 $this->businessObj->$parent->SetCurentLine($count);
+                $count++;
             }
         }
 
@@ -126,5 +127,9 @@ class SapConnector {
         } else {
             $this->businessObj->$parent->$key = $value;
         }
+    }
+
+    public function __destruct() {
+        $this->businessObj->Disconnect;
     }
 }

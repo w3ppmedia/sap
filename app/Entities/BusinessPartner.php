@@ -6,7 +6,7 @@ class BusinessPartner extends BaseEntity
     /**
      * @var string
      */
-    protected $table = 16;
+    protected $table = 2;
 
     /**
      * @var array
@@ -14,8 +14,9 @@ class BusinessPartner extends BaseEntity
     protected $validation = array(
         // DO NOT EDIT
         'id' => '',
-        'cardCode' => 'required',
-        'cardName' => '',
+        'CardCode' => 'required',
+        'CardName' => '',
+        'CardType' => 'integer|between:0,2',
         // /DO NOT EDIT
     );
 }

@@ -12,8 +12,13 @@ class BusinessPartnerRequest extends ApiRequest
     {
         return [
             'id' => '',
-            'cardCode' => 'required',
-            'cardName' => ''
+            'CardCode' => 'required',
+            'CardName' => '',
+            'CardType' => '',
+            'ContactPerson' => '',
+            'Currency' => '',
+            'DiscountPercent' => '',
+            'ContactEmployees' => ''
         ];
     }
 }
