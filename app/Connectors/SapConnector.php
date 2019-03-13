@@ -108,12 +108,16 @@ class SapConnector {
 
     private function setProperties ($key, $value, $parent = null) {
         if (is_array($value)) {
+            $count = 1;
             $parent = $key;
+            $this->businessObj->$parent->add;
 
             foreach ($value as $line) {
                 foreach ($line as $key => $item) {
                     $this->setProperties($key, $item, $parent);
                 }
+
+                $this->businessObj->$parent->SetCurentLine($count);
             }
         }
 
