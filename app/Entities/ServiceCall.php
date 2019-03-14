@@ -14,6 +14,7 @@ class ServiceCall extends BaseEntity
         // DO NOT EDIT
         'id' => '',
         'CustomerCode' => 'required',
+        'ItemCode' => 'required',
         'InternalSerialNum' => 'required',
         'Subject' => 'required',
         'CallType' => '',

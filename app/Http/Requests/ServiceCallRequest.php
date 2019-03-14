@@ -11,6 +11,7 @@ class ServiceCallRequest extends ApiRequest
     {
         $rules = [
             'CustomerCode' => 'required',
+            'ItemCode' => 'required',
             'InternalSerialNum' => 'required',
             'Subject' => 'required'
         ];
