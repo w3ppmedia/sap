@@ -1,6 +1,6 @@
 <?php namespace App\Http\Requests;
 
-class ServiceCallRequest
+class ServiceCallRequest extends ApiRequest
 {
     /**
      * Get the validation rules that apply to the request.
