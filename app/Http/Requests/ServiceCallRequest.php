@@ -1,6 +1,6 @@
 <?php namespace App\Http\Requests;
 
-class BusinessPartnerRequest extends ApiRequest
+class ServiceCallRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -10,10 +10,9 @@ class BusinessPartnerRequest extends ApiRequest
     public function rules()
     {
         $rules = [
-            'id' => '',
-            'CardCode' => 'required|min:6',
-            'CardName' => 'required',
-            'CardType' => 'required',
+            'CustomerCode' => 'required',
+            'InternalSerialNum' => 'required',
+            'Subject' => 'required'
         ];
 
         return $rules;
