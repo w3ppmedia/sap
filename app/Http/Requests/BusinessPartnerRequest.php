@@ -10,15 +10,13 @@ class BusinessPartnerRequest extends ApiRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'id' => '',
-            'CardCode' => 'required',
-            'CardName' => '',
-            'CardType' => '',
-            'ContactPerson' => '',
-            'Currency' => '',
-            'DiscountPercent' => '',
-            'ContactEmployees' => ''
+            'CardCode' => 'required|min:6',
+            'CardName' => 'required',
+            'CardType' => 'required',
         ];
+
+        return $rules;
     }
 }

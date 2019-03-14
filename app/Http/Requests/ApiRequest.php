@@ -37,12 +37,12 @@ abstract class ApiRequest extends FormRequest
      * @param null $keys
      * @return array
      */
-    public function all($keys = null)
-    {
-        $data = parent::all();
-        $permitted = $this->getPermittedFields();
-        return $this->filterInputArr($data, $permitted);
-    }
+    // public function all($keys = null)
+    // {
+    //     $data = parent::all();
+    //     $permitted = $this->getPermittedFields();
+    //     return $this->filterInputArr($data, $permitted);
+    // }
 
     /**
      * @param string|null $root

@@ -15,7 +15,8 @@
 header('Access-Control-Allow-Origin: *');
 header( 'Access-Control-Allow-Headers: Authorization, Content-Type' );
 
-Route::post('bp', 'BusinessPartnerController@post');
+Route::post('business-partner', 'BusinessPartnerController@post');
+Route::post('service-call', 'ServiceCallController@post');
 
 
 

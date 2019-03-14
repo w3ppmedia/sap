@@ -1,6 +1,7 @@
 <?php namespace App\Connectors;
 
 use Exception;
+use Log;
 
 class SapConnector {
 
@@ -20,25 +21,26 @@ class SapConnector {
      * @throws Exception
      */
     public function __construct(array $configs = array()) {
-		try {
-			$this->sapCom = new \COM("SAPbobsCOM.company") or die ("No connection");
+      try {
+         $this->sapCom = new \COM('SAPbobsCOM.company') or die ('No connection');
 
-            $this->sapCom->DbServerType = "6";
-            $this->sapCom->server = "SAPSERVER";
-            $this->sapCom->CompanyDB = $configs['database'];
-            $this->sapCom->username = $configs['username'];
-            $this->sapCom->password = $configs['password'];
+         $this->sapCom->DbServerType = "6";
+         $this->sapCom->Server = "SAPSERVER";
+         $this->sapCom->LicenseServer = "SAPSERVER:30000";
+         $this->sapCom->Username = $configs['username'];
+         $this->sapCom->Password = $configs['password'];
+         $this->sapCom->CompanyDB = $configs['database'];
 
-			$lRetCode = $this->sapCom->Connect;
+         $lRetCode = $this->sapCom->Connect;
 
-			if ($lRetCode != 0) {
-				throw new Exception($this->getError($lRetCode));
-			}
+         if ($lRetCode != 0) {
+            throw new Exception($this->getError($lRetCode));
+        }
 
-		} catch (com_exception $e) {
-		    throw $e;
-		}
-	}
+    } catch (com_exception $e) {
+      throw $e;
+  }
+}
 
     /**
      * @param int $errCode
@@ -89,7 +91,20 @@ class SapConnector {
     public function insert($data) {
         try {
             foreach ($data as $key => $value) {
-                $this->setProperties($key, $value);
+                if (is_array($value)) {
+                    $count = 0;
+                    
+                    foreach ($value as $line) {
+                        $this->businessObj->$key->SetCurrentLine($count);
+                        $this->setLineProperties($line, $key);
+                        $this->businessObj->$key->add;
+                    
+                        $count++;
+                    }
+
+                } else {
+                    $this->setProperties($key, $value);
+                }
             }
 
             $RetCode = $this->businessObj->add();
@@ -99,6 +114,7 @@ class SapConnector {
             } else {
                 throw new Exception($this->getError($RetCode));
             }
+
         } catch (com_exception $e) {
             throw new $e;
         }
@@ -107,25 +123,16 @@ class SapConnector {
     public function update() {}
 
     private function setProperties ($key, $value, $parent = null) {
-        if (is_array($value)) {
-            $count = 1;
-            $parent = $key;
-            $this->businessObj->$parent->add;
-
-            foreach ($value as $line) {
-                foreach ($line as $key => $item) {
-                    $this->setProperties($key, $item, $parent);
-                }
-
-                $this->businessObj->$parent->SetCurentLine($count);
-                $count++;
-            }
-        }
-
         if (is_null($parent)) {
             $this->businessObj->$key = $value;
         } else {
             $this->businessObj->$parent->$key = $value;
+        }
+    }
+
+    public function setLineProperties($line, $parent) {
+        foreach ($line as $key => $item) {
+            $this->setProperties($key, $item, $parent);
         }
     }
 
