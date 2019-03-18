@@ -1,17 +1,6 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: cyrilnxumalo
- * Date: 2018/12/21
- * Time: 17:18
- */
+<?php namespace App\Models;
 
-namespace App\Models;
-
-
-use Illuminate\Database\Eloquent\Model;
-
-class BaseModel extends Model
+class BaseModel
 {
     /**
      * @var array

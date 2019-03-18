@@ -13,13 +13,11 @@ class ServiceCall extends BaseEntity
     protected $validation = array(
         // DO NOT EDIT
         'id' => '',
-        'CustomerCode' => 'required',
-        'ItemCode' => 'required',
-        'InternalSerialNum' => 'required',
-        'Subject' => 'required',
+        'CustomerCode' => '',
+        'ItemCode' => '',
+        'InternalSerialNum' => '',
+        'Subject' => '',
         'CallType' => '',
         // /DO NOT EDIT
     );
-
-
 }

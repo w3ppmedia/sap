@@ -9,13 +9,19 @@ class ServiceCallRequest extends ApiRequest
      */
     public function rules()
     {
-        $rules = [
-            'CustomerCode' => 'required',
-            'ItemCode' => 'required',
-            'InternalSerialNum' => 'required',
-            'Subject' => 'required'
-        ];
-
-        return $rules;
+        switch($this->method())
+        {
+            case 'POST': {
+                return [
+                    'CustomerCode' => 'required',
+                    'ItemCode' => 'required',
+                    'InternalSerialNum' => 'required',
+                    'Subject' => 'required'
+                ]; 
+            }
+            case 'PUT': {
+                return [];
+            }    
+        }
     }
 }

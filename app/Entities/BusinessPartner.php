@@ -14,7 +14,7 @@ class BusinessPartner extends BaseEntity
     protected $validation = array(
         // DO NOT EDIT
         'id' => '',
-        'CardCode' => 'required',
+        'CardCode' => '',
         'CardName' => '',
         'CardType' => 'integer|between:0,2',
         // /DO NOT EDIT

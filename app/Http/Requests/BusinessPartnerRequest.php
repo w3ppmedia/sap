@@ -9,13 +9,19 @@ class BusinessPartnerRequest extends ApiRequest
      */
     public function rules()
     {
-        $rules = [
-            'id' => '',
-            'CardCode' => 'required|min:6',
-            'CardName' => 'required',
-            'CardType' => 'required',
-        ];
-
-        return $rules;
+        switch($this->method())
+        {
+            case 'POST': {
+                return [
+                    'id' => '',
+                    'CardCode' => 'required|min:6',
+                    'CardName' => 'required',
+                    'CardType' => 'required',
+                ]; 
+            }
+            case 'PUT': {
+                return [];
+            }    
+        }
     }
 }

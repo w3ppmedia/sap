@@ -4,10 +4,18 @@
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ServiceCallRequest;
 use App\Entities\ServiceCall;
+use App\Models\ServiceCalls;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ServiceCallController extends Controller
 {
+
+    private $serviceCallModel;
+
+    public function __construct(ServiceCalls $serviceCalls) {
+        $this->serviceCallModel = $serviceCalls;
+    }
+
     /**
      * @param ServiceCallRequest $serviceCallRequest
      * @return \Illuminate\Http\JsonResponse
@@ -18,6 +26,25 @@ class ServiceCallController extends Controller
         try {
             $serviceCallRequest = $serviceCallRequest->all();
             $serviceCall = ServiceCall::create($serviceCallRequest);
+            return response()->json($serviceCall->toArray());
+        } catch (BadRequestException $e) {
+            throw new HttpResponseException(response()->json($e->toArray(), $e->getCode()));
+        }
+    }
+
+    /**
+     * @param $id
+     * @param ServiceCallRequest $serviceCallRequest
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\BadRequestException
+     */
+    public function put($id, ServiceCallRequest $serviceCallRequest)
+    {
+        $serviceCall = $this->serviceCallModel->findById($id);
+
+        try {
+            $serviceCallRequest = $serviceCallRequest->all();
+            $serviceCall->update($serviceCallRequest);
             return response()->json($serviceCall->toArray());
         } catch (BadRequestException $e) {
             throw new HttpResponseException(response()->json($e->toArray(), $e->getCode()));

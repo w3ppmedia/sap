@@ -1,7 +1,6 @@
 <?php namespace App\Connectors;
 
 use Exception;
-use Log;
 
 class SapConnector {
 
@@ -21,26 +20,26 @@ class SapConnector {
      * @throws Exception
      */
     public function __construct(array $configs = array()) {
-      try {
-         $this->sapCom = new \COM('SAPbobsCOM.company') or die ('No connection');
+        try {
+            $this->sapCom = new \COM('SAPbobsCOM.company') or die ('No connection');
 
-         $this->sapCom->DbServerType = "6";
-         $this->sapCom->Server = "SAPSERVER";
-         $this->sapCom->LicenseServer = "SAPSERVER:30000";
-         $this->sapCom->Username = $configs['username'];
-         $this->sapCom->Password = $configs['password'];
-         $this->sapCom->CompanyDB = $configs['database'];
+            $this->sapCom->DbServerType = "6";
+            $this->sapCom->Server = "SAPSERVER";
+            $this->sapCom->LicenseServer = "SAPSERVER:30000";
+            $this->sapCom->Username = $configs['username'];
+            $this->sapCom->Password = $configs['password'];
+            $this->sapCom->CompanyDB = $configs['database'];
 
-         $lRetCode = $this->sapCom->Connect;
+            $lRetCode = $this->sapCom->Connect;
 
-         if ($lRetCode != 0) {
-            throw new Exception($this->getError($lRetCode));
+            if ($lRetCode != 0) {
+                throw new Exception($this->getError($lRetCode));
+            }
+
+        } catch (com_exception $e) {
+            throw $e;
         }
-
-    } catch (com_exception $e) {
-      throw $e;
-  }
-}
+    }
 
     /**
      * @param int $errCode
@@ -98,7 +97,7 @@ class SapConnector {
                         $this->businessObj->$key->SetCurrentLine($count);
                         $this->setLineProperties($line, $key);
                         $this->businessObj->$key->add;
-                    
+
                         $count++;
                     }
 
@@ -120,18 +119,56 @@ class SapConnector {
         }
     }
 
-    public function update() {}
+    public function update($data) {
+        try {
+            foreach ($data as $key => $value) {
+                if ($key == 'id') {
+                    continue;
+                }
+
+                if (is_array($value)) {
+                    foreach ($value as $line) {
+                        if (isset($line['LineNum'])) {
+                            $this->businessObj->$key->add;
+                        }
+                        $this->businessObj->$key->SetCurrentLine($lineNum);
+                        $this->setLineProperties($line, $key);
+                    }
+
+                } else {
+                    $this->setProperties($key, $value);
+                }
+            }
+
+            $RetCode = $this->businessObj->update();
+
+            if ($RetCode == 0) {
+                return $this->sapCom->GetNewObjectKey();
+            } else {
+                throw new Exception($this->getError($RetCode));
+            }
+
+        } catch (com_exception $e) {
+            throw new $e;
+        }
+    }
 
     private function setProperties ($key, $value, $parent = null) {
-        if (is_null($parent)) {
-            $this->businessObj->$key = $value;
+        $obj = ($parent) ? $this->businessObj->$parent : $this->businessObj;
+
+        if (strncmp_startswith($key, 'U_')) {
+            $obj->UserFields->Fields->Item($key)->Value = $value;
         } else {
-            $this->businessObj->$parent->$key = $value;
+            $obj->$key = $value;
         }
     }
 
     public function setLineProperties($line, $parent) {
         foreach ($line as $key => $item) {
+            if ($key == 'LineNum') {
+                continue;
+            }
+
             $this->setProperties($key, $item, $parent);
         }
     }

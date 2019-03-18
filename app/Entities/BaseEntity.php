@@ -210,7 +210,7 @@ class BaseEntity
         $connecion = Container::getInstance()->make(SapConnector::class);
 
         if ($this->id) {
-            $connecion->table($this->getTable())->where()->update();
+            $connecion->table($this->getTable())->where($this->id)->update($data);
         } else {
             $id = $connecion->table($this->getTable())->insert($data);
             $this->id = $id;
