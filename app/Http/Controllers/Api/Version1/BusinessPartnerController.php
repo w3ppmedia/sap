@@ -7,6 +7,9 @@ use App\Entities\BusinessPartner;
 use App\Models\BusinessPartners;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
+use App\Connectors\Sap\Di\Server\Connector;
+use App\Connectors\Sap\Di\Server\Client;
+
 class BusinessPartnerController extends Controller
 {
 
@@ -23,13 +26,17 @@ class BusinessPartnerController extends Controller
      */
     public function post(BusinessPartnerRequest $businessPartnerRequest)
     {
-        try {
-            $businessPartnerRequest = $businessPartnerRequest->all();
-            $businessPartner = BusinessPartner::create($businessPartnerRequest);
-            return response()->json($businessPartner->toArray());
-        } catch (BadRequestException $e) {
-            throw new HttpResponseException(response()->json($e->toArray(), $e->getCode()));
-        }
+
+        $connector = new Connector(new Client());
+        $connector->login();
+
+//        try {
+//            $businessPartnerRequest = $businessPartnerRequest->all();
+//            $businessPartner = BusinessPartner::create($businessPartnerRequest);
+//            return response()->json($businessPartner->toArray());
+//        } catch (BadRequestException $e) {
+//            throw new HttpResponseException(response()->json($e->toArray(), $e->getCode()));
+//        }
     }
 
     /**
