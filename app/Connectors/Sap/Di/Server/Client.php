@@ -8,11 +8,11 @@ class Client
 
     public function __construct()
     {
-        $this->obj = new \COM('SBODI_Server.company') or die ('No connection');
+        $this->obj = new \COM('SBODI_Server.node') or die ('No connection');
     }
 
     public function send($xml) {
-        $response = $this->obj->Interact();
-        return simplexml_load_string($response);
+        $response = $this->obj->Interact($xml);
+        return $response;
     }
 }
