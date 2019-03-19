@@ -2,11 +2,14 @@
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
-use Config;
-use App\Connectors\SapConnector;
+
+use App\Connectors\Sap\Di\Server\Client;
+use App\Connectors\Sap\Di\Server\Connector;
 
 class ConnectorConfigServiceProvider extends ServiceProvider
 {
+
+    private $session;
 
     /**
      * Bootstrap any application services.
@@ -16,16 +19,8 @@ class ConnectorConfigServiceProvider extends ServiceProvider
      */
     public function boot(Request $request)
     {
-        if ($request->hasHeader('database')) {
-            config(['sap.database' => $request->header('database')]);
-        }
-
-        if ($request->hasHeader('username')) {
-            config(['sap.username' => $request->header('username')]);
-        }
-
-        if ($request->hasHeader('password')) {
-            config(['sap.password' => $request->header('password')]);
+        if ($request->hasHeader('session')) {
+            $this->session = $request->header('session');
         }
     }
 
@@ -36,8 +31,12 @@ class ConnectorConfigServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(SapConnector::class, function ($app) {
-            return new SapConnector(config('sap'));
+        $this->app->bind(Client::class, function ($app) {
+            return new Client();
+        });
+
+        $this->app->singleton(Connector::class, function ($app) {
+            return new Connector($app->make(Client::class));
         });
     }
 }

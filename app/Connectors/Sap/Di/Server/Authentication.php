@@ -2,8 +2,14 @@
 
 trait Authentication
 {
+    /**
+     * @var string
+     */
     private $sessionId;
 
+    /**
+     * @var array
+     */
     private $credentials = array(
         'DatabaseServer' => 'SAPSERVER',
         'DatabaseName' => 'PENTA_LIVE',
@@ -14,14 +20,23 @@ trait Authentication
         'LicenseServer' => 'SAPSERVER:30000'
     );
 
-    protected function setSessionId($sessionId) {
+    /**
+     * @param $sessionId
+     */
+    public function setSessionId($sessionId) {
         $this->sessionId = $sessionId;
     }
 
+    /**
+     * @return mixed
+     */
     public function getSession() {
         return $this->sessionId;
     }
 
+    /**
+     * @param array $credentials
+     */
     public function login($credentials = array())
     {
         $xml = new RequestSapXMLParser('1.0', 'UTF-16');
@@ -31,15 +46,18 @@ trait Authentication
             $login->appendChild($xml->createElement($name, $value));
         }
 
-        $this->send($xml->saveXML());
+        $this->sendRequest($xml->saveXML());
         $this->setSessionId($this->getResponse()->getValueByQuery('xmlns:LoginResponse/xmlns:SessionID'));
     }
 
+    /**
+     * @param $sessionId
+     */
     public function logout($sessionId) {
         $xml = new RequestSapXMLParser('1.0', 'UTF-8');
         $xml->addToHeader('SessionID', $sessionId);
         $xml->addToBodyNS('http://www.sap.com/SBO/DIS', 'dis:Logout');
 
-        var_dump($xml->saveXML());
+        $this->sendRequest($xml->saveXML());
     }
 }

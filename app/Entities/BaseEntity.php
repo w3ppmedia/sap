@@ -2,7 +2,7 @@
 
 use App\Exceptions\BadRequestException;
 use App\Validation\Validator;
-use App\Connectors\SapConnector;
+use App\Connectors\Sap\Di\Server\Connector;
 use Illuminate\Container\Container;
 
 /**
@@ -207,7 +207,7 @@ class BaseEntity
     public function save()
     {
         $data = $this->validate();
-        $connecion = Container::getInstance()->make(SapConnector::class);
+        $connecion = Container::getInstance()->make(Connector::class);
 
         if ($this->id) {
             $connecion->table($this->getTable())->where($this->id)->update($data);
