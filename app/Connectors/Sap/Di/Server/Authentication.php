@@ -24,7 +24,7 @@ trait Authentication
 
     public function login($credentials = array())
     {
-        $xml = new RequestSapXMLParser('1.0', 'UTF-8');
+        $xml = new RequestSapXMLParser('1.0', 'UTF-16');
         $login = $xml->addToBodyNS('http://www.sap.com/SBO/DIS', 'dis:Login');
 
         foreach (array_replace($this->credentials, $credentials) as $name => $value) {
@@ -32,7 +32,7 @@ trait Authentication
         }
 
         $this->send($xml->saveXML());
-        $this->setSessionId($this->getResponse()->getValueByQuery('LoginResponse/SessionID'));
+        $this->setSessionId($this->getResponse()->getValueByQuery('xmlns:LoginResponse/xmlns:SessionID'));
     }
 
     public function logout($sessionId) {

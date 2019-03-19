@@ -10,12 +10,12 @@ class ResponseSapXMLParser extends SapXMLParser
 
         $this->xpath = new \DOMXPath($this);
         $this->xpath->registerNamespace('env', 'http://www.w3.org/2003/05/soap-envelope');
-        $this->xpath->registerNamespace('dis', 'http://www.sap.com/SBO/DIS');
+        $this->xpath->registerNamespace('xmlns', 'http://www.sap.com/SBO/DIS');
     }
 
     public function getValueByQuery($string) {
         try {
-            $node = $this->xpath->evaluate('//env:Body/dis:'.$string)->item(0)->nodeValue;
+            $node = $this->xpath->evaluate('//env:Body/'.$string)->item(0)->nodeValue;
         } catch (\Exception $e) {
             throw $e;
         }

@@ -9,4 +9,10 @@ class SapXMLParser extends \DOMDocument
     protected $body;
 
     protected $header;
+
+    public function saveXML(DOMNode $node = null, $options = null)
+    {
+    	$xml = parent::saveXML($node, $options);
+        return mb_convert_encoding($xml, 'UTF-8', 'UTF-16');
+    }
 }
