@@ -26,17 +26,13 @@ class BusinessPartnerController extends Controller
      */
     public function post(BusinessPartnerRequest $businessPartnerRequest)
     {
-
-        $connector = new Connector(new Client());
-        $connector->login();
-
-//        try {
-//            $businessPartnerRequest = $businessPartnerRequest->all();
-//            $businessPartner = BusinessPartner::create($businessPartnerRequest);
-//            return response()->json($businessPartner->toArray());
-//        } catch (BadRequestException $e) {
-//            throw new HttpResponseException(response()->json($e->toArray(), $e->getCode()));
-//        }
+        try {
+            $businessPartnerRequest = $businessPartnerRequest->all();
+            $businessPartner = BusinessPartner::create($businessPartnerRequest);
+            return response()->json($businessPartner->toArray());
+        } catch (BadRequestException $e) {
+            throw new HttpResponseException(response()->json($e->toArray(), $e->getCode()));
+        }
     }
 
     /**

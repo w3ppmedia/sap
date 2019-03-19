@@ -10,7 +10,13 @@ class Connector
         $this->client = $client;
     }
 
-    public function login() {
-        $this->client->connect();
+    public function login($credentials) {
+        $this->client->login($credentials);
+        return $this->client->getSession();
+    }
+
+    public function logout($sessionId) {
+        $this->client->logout($sessionId);
+        return true;
     }
  }

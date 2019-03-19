@@ -2,29 +2,44 @@
 
 trait Authentication
 {
-    private $session;
+    private $sessionId;
 
-    public function connect()
-    {
-        $xml = '<?xml version="1.0" encoding="UTF-16"?>
-                <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
-                   <env:Body>
-                      <dis:Login xmlns:dis="http://www.sap.com/SBO/DIS">
-                         <DatabaseServer>SAPSERVER</DatabaseServer>
-                         <DatabaseName>PENTA_LIVE</DatabaseName>
-                         <DatabaseType>6</DatabaseType>
-                         <CompanyUsername>dir002</CompanyUsername>
-                         <CompanyPassword>nivek</CompanyPassword>
-                         <Language>ln_English</Language>
-                         <LicenseServer>SAPSERVER:30000</LicenseServer>
-                      </dis:Login>
-                   </env:Body>
-                </env:Envelope>';
+    private $credentials = array(
+        'DatabaseServer' => 'SAPSERVER',
+        'DatabaseName' => 'PENTA_LIVE',
+        'DatabaseType' => 6,
+        'CompanyUsername' => 'dir002',
+        'CompanyPassword' => 'nivek',
+        'Language' => 'ln_English',
+        'LicenseServer' => 'SAPSERVER:30000'
+    );
 
-        // $response = $this->send($xml);
-
-        var_dump($response);
+    protected function setSessionId($sessionId) {
+        $this->sessionId = $sessionId;
     }
 
-    public function send() {}
+    public function getSession() {
+        return $this->sessionId;
+    }
+
+    public function login($credentials = array())
+    {
+        $xml = new RequestSapXMLParser('1.0', 'UTF-8');
+        $login = $xml->addToBodyNS('http://www.sap.com/SBO/DIS', 'dis:Login');
+
+        foreach (array_replace($this->credentials, $credentials) as $name => $value) {
+            $login->appendChild($xml->createElement($name, $value));
+        }
+
+        $this->send($xml->saveXML());
+        $this->setSessionId($this->getResponse()->getValueByQuery('LoginResponse/SessionID'));
+    }
+
+    public function logout($sessionId) {
+        $xml = new RequestSapXMLParser('1.0', 'UTF-8');
+        $xml->addToHeader('SessionID', $sessionId);
+        $xml->addToBodyNS('http://www.sap.com/SBO/DIS', 'dis:Logout');
+
+        var_dump($xml->saveXML());
+    }
 }

@@ -21,6 +21,8 @@ Route::put('business-partner/{id}', 'BusinessPartnerController@put');
 Route::post('service-call', 'ServiceCallController@post');
 Route::put('service-call/{id}', 'ServiceCallController@put');
 
+Route::post('auth/login', 'AuthController@login');
+Route::post('auth/logout', 'AuthController@logout');
 
 
 
