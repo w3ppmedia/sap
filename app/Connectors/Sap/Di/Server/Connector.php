@@ -7,6 +7,8 @@ class Connector extends Builder
      */
     private $client;
 
+    protected $clientRequest;
+
     /**
      * Connector constructor.
      * @param Client $client

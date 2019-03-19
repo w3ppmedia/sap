@@ -6,7 +6,7 @@ class BusinessPartner extends BaseEntity
     /**
      * @var string
      */
-    protected $table = 2;
+    protected $table = 'BusinessPartners';
 
     /**
      * @var array

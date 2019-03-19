@@ -22,6 +22,18 @@ class RequestSapXMLParser extends SapXMLParser
         return $item;
     }
 
+    public function addToBody($name, $value = null) {
+        $item = $this->createElement($name, $value);
+        $this->body->appendChild($item);
+
+        return $item;
+    }
+
+    public function addToObject($name, $value = null, $object = null) {
+        $item = $this->createElement($name, $value);
+        $object->appendChild($item);
+    }
+
     private function setUp() {
         $this->wrapper = $this->createElementNS('http://schemas.xmlsoap.org/soap/envelope/', 'env:Envelope');
         $this->appendChild($this->wrapper);
