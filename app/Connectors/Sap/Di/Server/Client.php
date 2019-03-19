@@ -19,7 +19,7 @@ class Client implements ClientInterface
      */
     public function __construct()
     {
-//        $this->obj = new \COM('SBODI_Server.node') or die ('No connection');
+        $this->obj = new \COM('SBODI_Server.node') or die ('No connection');
     }
 
     /**

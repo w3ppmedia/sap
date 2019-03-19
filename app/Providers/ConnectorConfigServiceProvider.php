@@ -8,35 +8,33 @@ use App\Connectors\Sap\Di\Server\Connector;
 
 class ConnectorConfigServiceProvider extends ServiceProvider
 {
-
-    private $session;
-
     /**
      * Bootstrap any application services.
      *
-     * @param Request $request
      * @return void
      */
-    public function boot(Request $request)
-    {
-        if ($request->hasHeader('session')) {
-            $this->session = $request->header('session');
-        }
-    }
+    public function boot() {}
 
     /**
      * Register any application services.
      *
+     * @param Request $request
      * @return void
      */
-    public function register()
+    public function register(Request $request)
     {
         $this->app->bind(Client::class, function ($app) {
             return new Client();
         });
 
-        $this->app->singleton(Connector::class, function ($app) {
-            return new Connector($app->make(Client::class));
+        $this->app->singleton(Connector::class, function ($app) use ($request) {
+            $connector = new Connector($app->make(Client::class));
+
+            if ($request->hasHeader('session')) {
+                $connector->setClientSession($request->header('session'));
+            }
+
+            return $connector;
         });
     }
 }
