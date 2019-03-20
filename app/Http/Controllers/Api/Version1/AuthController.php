@@ -29,7 +29,7 @@ class AuthController extends Controller
         $authRequest = $authRequest->all();
         $this->connector->createClientSession($authRequest);
 
-        return response()->json(['SessionId' => $this->connector->getClientSession()]);
+        return response()->json(['SessionId' => $this->connector->getClient()->getSession()]);
     }
 
     /**
