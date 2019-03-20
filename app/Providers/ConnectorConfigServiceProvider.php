@@ -17,8 +17,8 @@ class ConnectorConfigServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot(Request $request) {
-        if ($request->hasHeader('Session')) {
-            $this->session = $request->header('Session');
+        if ($request->hasHeader('Authorization')) {
+            $this->session = $request->header('Authorization');
         }
     }
 

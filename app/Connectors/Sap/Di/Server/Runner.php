@@ -7,6 +7,12 @@ class Runner
     protected $request;
 
     public function process() {
-        $this->client->sendRequest($this->request->saveXml());
+    	$xml = $this->request->saveXml();
+
+    	try {
+    		$this->client->sendRequest($xml);
+    	} catch (\Exception  $e) {
+    		throw $e;
+    	}
     }
 }
