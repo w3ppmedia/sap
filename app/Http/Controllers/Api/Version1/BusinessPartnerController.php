@@ -36,17 +36,16 @@ class BusinessPartnerController extends Controller
     }
 
     /**
-     * @param $id
      * @param BusinessPartnerRequest $businessPartnerRequest
      * @return \Illuminate\Http\JsonResponse
      * @throws \App\Exceptions\BadRequestException
      */
-    public function put($id, BusinessPartnerRequest $businessPartnerRequest)
+    public function put(BusinessPartnerRequest $businessPartnerRequest)
     {
-        $businessPartner = $this->businessPartnerModel->findById($id);
+        $businessPartnerRequest = $businessPartnerRequest->all();
 
         try {
-            $businessPartnerRequest = $businessPartnerRequest->all();
+            $businessPartner = $this->businessPartnerModel->findById($businessPartnerRequest['id']);
             $businessPartner->update($businessPartnerRequest);
             return response()->json($businessPartner->toArray());
         } catch (BadRequestException $e) {

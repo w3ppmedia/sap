@@ -3,7 +3,6 @@
 use App\Connectors\Sap\Di\Server\Builder;
 use App\Exceptions\BadRequestException;
 use App\Validation\Validator;
-use App\Connectors\Sap\Di\Server\Connector;
 use Illuminate\Container\Container;
 
 /**
@@ -29,6 +28,12 @@ class BaseEntity
      * @var string
      */
     protected $table;
+
+    /**
+     * @var string
+     */
+    protected $primaryKey;
+
 
     /**
      * @var array
@@ -211,7 +216,7 @@ class BaseEntity
         $connecion = Container::getInstance()->make(Builder::class);
 
         if ($this->id) {
-            $connecion->table($this->getTable())->where(['id' => $this->id])->update($data);
+            $connecion->table($this->getTable())->where([$this->primaryKey => $this->id])->update($data);
         } else {
             $id = $connecion->table($this->getTable())->insert($data);
             $this->id = $id;

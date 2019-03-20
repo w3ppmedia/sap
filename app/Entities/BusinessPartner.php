@@ -9,6 +9,11 @@ class BusinessPartner extends BaseEntity
     protected $table = 'BusinessPartners';
 
     /**
+     * @var string
+     */
+    protected $primaryKey = 'CardCode';
+
+    /**
      * @var array
      */
     protected $validation = array(
