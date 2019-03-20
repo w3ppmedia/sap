@@ -14,9 +14,9 @@ class BusinessPartnerRequest extends ApiRequest
             case 'POST': {
                 return [
                     'id' => '',
-                    'CardCode' => 'required|min:6',
-                    'CardName' => 'required',
-                    'CardType' => 'required',
+                    'CardCode' => '',
+                    'CardName' => '',
+                    'CardType' => '',
                 ]; 
             }
             case 'PUT': {

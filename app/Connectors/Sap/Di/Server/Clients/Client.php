@@ -1,4 +1,4 @@
-<?php namespace App\Connectors\Sap\Di\Server;
+<?php namespace App\Connectors\Sap\Di\Server\Clients;
 
 class Client implements ClientInterface
 {
@@ -10,7 +10,7 @@ class Client implements ClientInterface
     private $obj;
 
     /**
-     * @var ResponseSapXMLParser
+     * @var Response
      */
     private $response;
 
@@ -26,14 +26,14 @@ class Client implements ClientInterface
      * @param $xml
      */
     public function setResponse($xml) {
-        $this->response = new ResponseSapXMLParser('1.0', 'UTF-8');
+        $this->response = new Response('1.0', 'UTF-8');
         $this->response->loadXML($xml);
     }
 
     /**
-     * @return ResponseSapXMLParser
+     * @return Response
      */
-    public function getResponse() : ResponseSapXMLParser {
+    public function getResponse() : Response {
         return $this->response;
     }
 
@@ -41,6 +41,7 @@ class Client implements ClientInterface
      * @param $xml
      */
     public function sendRequest($xml) {
+        $xml = mb_convert_encoding($xml, 'UTF-8', 'UTF-16');
         $response = $this->obj->Interact($xml);
         $this->setResponse($response);
     }

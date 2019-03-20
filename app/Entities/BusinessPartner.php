@@ -16,7 +16,7 @@ class BusinessPartner extends BaseEntity
         'id' => '',
         'CardCode' => '',
         'CardName' => '',
-        'CardType' => 'integer|between:0,2',
+        'CardType' => '',
         // /DO NOT EDIT
     );
 }

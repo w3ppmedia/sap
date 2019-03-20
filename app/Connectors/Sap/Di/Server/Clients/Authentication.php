@@ -1,4 +1,4 @@
-<?php namespace App\Connectors\Sap\Di\Server;
+<?php namespace App\Connectors\Sap\Di\Server\Clients;
 
 trait Authentication
 {
@@ -39,7 +39,7 @@ trait Authentication
      */
     public function login($credentials = array())
     {
-        $xml = new RequestSapXMLParser('1.0', 'UTF-16');
+        $xml = new Request('1.0', 'UTF-16');
         $login = $xml->addToBodyNS('http://www.sap.com/SBO/DIS', 'dis:Login');
 
         foreach (array_replace($this->credentials, $credentials) as $name => $value) {
@@ -54,7 +54,7 @@ trait Authentication
      * @param $sessionId
      */
     public function logout($sessionId) {
-        $xml = new RequestSapXMLParser('1.0', 'UTF-8');
+        $xml = new Request('1.0', 'UTF-8');
         $xml->addToHeader('SessionID', $sessionId);
         $xml->addToBodyNS('http://www.sap.com/SBO/DIS', 'dis:Logout');
 

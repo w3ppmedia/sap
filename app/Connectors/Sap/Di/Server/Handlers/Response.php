@@ -1,6 +1,6 @@
-<?php namespace App\Connectors\Sap\Di\Server;
+<?php namespace App\Connectors\Sap\Di\Server\Handlers;
 
-class ResponseSapXMLParser extends SapXMLParser
+class Response extends \DOMDocument
 {
     private $xpath;
 

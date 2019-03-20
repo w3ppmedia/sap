@@ -3,8 +3,9 @@
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
 
-use App\Connectors\Sap\Di\Server\Client;
+use App\Connectors\Sap\Di\Server\Clients\Client;
 use App\Connectors\Sap\Di\Server\Connector;
+use App\Connectors\Sap\Di\Server\Builder;
 
 class ConnectorConfigServiceProvider extends ServiceProvider
 {
@@ -16,8 +17,8 @@ class ConnectorConfigServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot(Request $request) {
-        if ($request->hasHeader('session')) {
-            $this->session = $request->header('session');
+        if ($request->hasHeader('Session')) {
+            $this->session = $request->header('Session');
         }
     }
 
@@ -40,6 +41,10 @@ class ConnectorConfigServiceProvider extends ServiceProvider
             }
 
             return $connector;
+        });
+
+        $this->app->bind(Builder::class, function ($app) {
+            return new Builder($app->make(Connector::class));
         });
     }
 }

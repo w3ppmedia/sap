@@ -8,7 +8,7 @@ use App\Models\BusinessPartners;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 use App\Connectors\Sap\Di\Server\Connector;
-use App\Connectors\Sap\Di\Server\Client;
+use App\Connectors\Sap\Di\Server\Clients;
 
 class BusinessPartnerController extends Controller
 {

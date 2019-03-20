@@ -1,13 +1,13 @@
 <?php namespace App\Connectors\Sap\Di\Server;
 
-class Connector extends Builder
+use App\Connectors\Sap\Di\Server\Clients\Client;
+
+class Connector
 {
     /**
      * @var Client
      */
     private $client;
-
-    protected $clientRequest;
 
     /**
      * Connector constructor.
@@ -39,9 +39,9 @@ class Connector extends Builder
     }
 
     /**
-     * @return mixed
+     * @return Client
      */
-    public function getClientSession() {
-        return $this->client->getSession();
+    public function getClient() {
+        return $this->client;
     }
  }

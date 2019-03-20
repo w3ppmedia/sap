@@ -1,65 +1,94 @@
 <?php namespace App\Connectors\Sap\Di\Server;
 
-abstract class Builder
+use App\Connectors\Sap\Di\Server\Handlers\Request;
+
+class Builder extends Runner
 {
-    protected $clientRequest;
+    protected $client;
 
-    protected $requestObject;
-
-    protected $AdmInfo;
+    protected $request;
 
     protected $table;
 
-    protected $bo;
+    public function __construct(Connector $connector)
+    {
+        $this->client = $connector->getClient();
 
-    public function prepQueryRequest() {
-        $this->clientRequest = new RequestSapXMLParser('1.0', 'UTF-16');
-        $this->clientRequest->addToHeader('SessionID', '4E7286AF-F906-47DC-8717-9A7631242E56');
-        $this->clientRequest->addToBodyNS('http://www.sap.com/SBO/DIS', 'dis:AddObject');
-
-        $this->bo = $this->clientRequest->createElement('BO');
-
-        $bom = $this->clientRequest->addToBody('BOM');
-        $bom->appendChild($this->bo);
-
-        $this->AdmInfo = $this->clientRequest->createElement('AdmInfo');
-        $this->bo->appendChild($this->AdmInfo);
+        $this->request = new Request('1.0', 'UTF-16');
+        $this->request->addToHeader('SessionID', $this->client->getSession());
     }
 
-    public function find() {}
+    public function prepQueryRequest() {
+        $this->request->withBodyElement();
+    }
 
     public function table($table) {
-        $this->prepQueryRequest();
         $this->table = $table;
-
-        $object = $this->clientRequest->createElement('Object', 'o'.$table);
-        $this->AdmInfo->appendChild($object);
+        $this->request->setOType('o'.$table);
 
         return $this;
     }
 
-    public function where() {
-        $this->prepQueryRequest();
+    public function where($query = array()) {
+        if (!empty($query)) {
+            $this->request->setQueryParams($query);
+        }
+
+        return $this;
     }
 
     public function insert($data) {
-        $parentObj = $this->clientRequest->createElement($this->table);
-        $row = $this->clientRequest->createElement('row');
-        $parentObj->appendChild($row);
-        $this->bo->appendChild($parentObj);
-
-        foreach ($data as $key => $value) {
-            $this->clientRequest->addToObject($key, $value, $row);
-        }
+        $this->request->withBodyElement();
+        $this->set($data);
 
         $this->process();
     }
 
-    public function process() {
-        $this->client->sendRequest($this->clientRequest->saveXml());
+    public function update($data) {
+        $this->request->withBodyElement('UpdateObject');
+        $this->set($data);
+
+        $this->process();
     }
 
-    public function update() {}
+    public function set($data = array()) {
+        $primaryBusinessObject = $this->request->addToBusinessObject($this->table);
+        $row = $this->request->createElement('row');
 
-    public abstract function getClientSession();
+        $primaryBusinessObject->appendChild($row);
+
+        foreach ($data as $key => $value) {
+            if ($key == 'id') {
+                continue;
+            }
+
+            if (is_array($value)) {
+                $secondaryBusinessObject = $this->request->addToBusinessObject($key);
+
+                foreach ($value as $lines) {
+                    $this->row($lines, function ($row) use ($secondaryBusinessObject) {
+                        $secondaryBusinessObject->appendChild($row);
+                    });
+                }
+            } else {
+                $entry = $this->request->createElement($key, $value);
+                $row->appendChild($entry);
+            }
+        }
+    }
+
+    public function row($array = array(), $callback) {
+        if (is_callable($callback)) {
+            $row = $this->request->createElement('row');
+
+            foreach ($array as $key => $value) {
+                $entry = $this->request->createElement($key, $value);
+                $row->appendChild($entry);
+            }
+
+            call_user_func($callback, $row);
+        }
+    }
+
+    public function find() {}
 }
