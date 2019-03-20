@@ -1,5 +1,7 @@
 <?php namespace App\Connectors\Sap\Di\Server\Clients;
 
+use App\Connectors\Sap\Di\Server\Handlers\Request;
+
 trait Authentication
 {
     /**
