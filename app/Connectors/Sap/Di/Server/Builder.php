@@ -72,6 +72,15 @@ class Builder extends Runner
                 $secondaryBusinessObject = $this->request->addToBusinessObject($key);
 
                 foreach ($value as $lines) {
+                    if (isset($lines['LineNum'])) {
+                        for ($i = 0; $i < $lines['LineNum']; $i++) {
+                            $row = $this->request->createElement('row');
+                            $secondaryBusinessObject->appendChild($row);
+                        }
+
+                        unset($lines['LineNum']);
+                    }
+
                     $this->row($lines, function ($row) use ($secondaryBusinessObject) {
                         $secondaryBusinessObject->appendChild($row);
                     });

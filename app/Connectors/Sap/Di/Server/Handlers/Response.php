@@ -1,5 +1,7 @@
 <?php namespace App\Connectors\Sap\Di\Server\Handlers;
 
+use App\Exceptions\BadRequestException;
+
 class Response extends \DOMDocument
 {
     private $xpath;
@@ -21,5 +23,15 @@ class Response extends \DOMDocument
         }
 
         return $node;
+    }
+
+    public function validate()
+    {
+        if (parent::validate()) {
+            throw new BadRequestException([
+                "error" => "Validates the document based on its DTD",
+                "value" => ""
+            ]);
+        }
     }
 }
