@@ -1,10 +1,11 @@
 <?php namespace App\Http\Controllers\Api\Version1;
 
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ServiceCallRequest;
+use App\Exceptions\BadRequestException;
 use App\Entities\ServiceCall;
 use App\Models\ServiceCalls;
+
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ServiceCallController extends Controller
@@ -19,7 +20,6 @@ class ServiceCallController extends Controller
     /**
      * @param ServiceCallRequest $serviceCallRequest
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\BadRequestException
      */
     public function post(ServiceCallRequest $serviceCallRequest)
     {
@@ -33,17 +33,15 @@ class ServiceCallController extends Controller
     }
 
     /**
-     * @param $id
      * @param ServiceCallRequest $serviceCallRequest
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\BadRequestException
      */
-    public function put($id, ServiceCallRequest $serviceCallRequest)
+    public function put(ServiceCallRequest $serviceCallRequest)
     {
-        $serviceCall = $this->serviceCallModel->findById($id);
+        $serviceCallRequest = $serviceCallRequest->all();
 
         try {
-            $serviceCallRequest = $serviceCallRequest->all();
+            $serviceCall = $this->serviceCallModel->findById($serviceCallRequest['id']);
             $serviceCall->update($serviceCallRequest);
             return response()->json($serviceCall->toArray());
         } catch (BadRequestException $e) {

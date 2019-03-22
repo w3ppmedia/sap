@@ -184,6 +184,8 @@ class BaseEntity
     public static function create($data) {
         try {
             $obj = new static($data); /** @var $obj BaseEntity */
+
+            $obj->preCreateHook($data);
             $obj->save();
             return $obj;
         } catch (BadRequestException $e) {
@@ -230,10 +232,11 @@ class BaseEntity
      * @throws BadRequestException
      */
     public function validate()
-    {   try {
-            return Validator::validate($this->getAttributes(), $this->getRules());
-        } catch (BadRequestException $e) {
-            throw $e;
-        }
+    {
+        return Validator::validate($this->getAttributes(), $this->getRules());
+    }
+
+    public function preCreateHook($data) {
+        return $data;
     }
 }

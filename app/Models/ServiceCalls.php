@@ -6,7 +6,7 @@ class ServiceCalls extends BaseModel
 {
     /**
      * @param $id
-     * @return BusinessPartner
+     * @return ServiceCall
      */
     public function findById($id) {
         return new ServiceCall(['id' => $id]);

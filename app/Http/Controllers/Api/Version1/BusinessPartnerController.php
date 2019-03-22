@@ -1,14 +1,12 @@
 <?php namespace App\Http\Controllers\Api\Version1;
 
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BusinessPartnerRequest;
+use App\Exceptions\BadRequestException;
 use App\Entities\BusinessPartner;
 use App\Models\BusinessPartners;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
-use App\Connectors\Sap\Di\Server\Connector;
-use App\Connectors\Sap\Di\Server\Clients;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class BusinessPartnerController extends Controller
 {
@@ -22,7 +20,6 @@ class BusinessPartnerController extends Controller
     /**
      * @param BusinessPartnerRequest $businessPartnerRequest
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\BadRequestException
      */
     public function post(BusinessPartnerRequest $businessPartnerRequest)
     {
@@ -38,7 +35,6 @@ class BusinessPartnerController extends Controller
     /**
      * @param BusinessPartnerRequest $businessPartnerRequest
      * @return \Illuminate\Http\JsonResponse
-     * @throws \App\Exceptions\BadRequestException
      */
     public function put(BusinessPartnerRequest $businessPartnerRequest)
     {

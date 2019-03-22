@@ -22,9 +22,15 @@ class Builder extends Runner
         $this->request->withBodyElement();
     }
 
-    public function table($table) {
+    public function table($name) {
+        $table = $BusinessObjectType = $name;
+
+        if (strpos($name,'.')) {
+            list($table, $BusinessObjectType) = explode('.', $name);
+        }
+
         $this->table = $table;
-        $this->request->setOType('o'.$table);
+        $this->request->setOType('o'.$BusinessObjectType);
 
         return $this;
     }
@@ -58,7 +64,7 @@ class Builder extends Runner
         $primaryBusinessObject->appendChild($row);
 
         foreach ($data as $key => $value) {
-            if ($key == 'id') {
+            if ($key == 'id' || $key == 'DocType') {
                 continue;
             }
 
@@ -90,5 +96,43 @@ class Builder extends Runner
         }
     }
 
-    public function find() {}
+    public function find(array $query) {
+        $this->request->withBodyElement('GetByKey');
+
+        if (!empty($query)) {
+            $this->request->setQueryParams($query);
+        }
+
+        $this->process();
+    }
+
+    public function delete(array $query) {
+        $this->request->withBodyElement('RemoveObject');
+
+        if (!empty($query)) {
+            $this->request->setQueryParams($query);
+        }
+
+        $this->process();
+    }
+
+    public function cancel(array $query) {
+        $this->request->withBodyElement('CancelObject');
+
+        if (!empty($query)) {
+            $this->request->setQueryParams($query);
+        }
+
+        $this->process();
+    }
+
+    public function close(array $query) {
+        $this->request->withBodyElement('CloseObject');
+
+        if (!empty($query)) {
+            $this->request->setQueryParams($query);
+        }
+
+        $this->process();
+    }
 }

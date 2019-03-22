@@ -1,11 +1,11 @@
 <?php namespace App\Entities;
 
-class ServiceCall extends BaseEntity
+class ServiceContract extends BaseEntity
 {
     /**
      * @var string
      */
-    protected $table = 'ServiceCalls';
+    protected $table = 'ServiceContracts';
 
     /**
      * @var array
