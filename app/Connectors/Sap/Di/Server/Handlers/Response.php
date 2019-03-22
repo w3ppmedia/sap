@@ -31,7 +31,7 @@ class Response extends \DOMDocument
     {
         $faultPath = '//env:Body/env:Fault';
 
-        if ($this->xpath->query('//env:Body/env:Fault')) {
+        if ($this->xpath->query('//env:Body/env:Fault')->length) {
             throw new BadRequestException([
                 [
                     'error' => $this->xpath->query($faultPath.'/env:Reason/env:Text')->item(0)->nodeValue,
