@@ -14,8 +14,8 @@ class ServiceCallRequest extends ApiRequest
             case 'POST': {
                 return [
                     'CustomerCode' => 'required',
-                    'ItemCode' => 'required',
-                    'InternalSerialNum' => 'required',
+                    'ItemCode' => '',
+                    'InternalSerialNum' => '',
                     'Subject' => 'required'
                 ]; 
             }

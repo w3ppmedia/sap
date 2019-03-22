@@ -13,6 +13,8 @@ class Response extends \DOMDocument
         $this->xpath = new \DOMXPath($this);
         $this->xpath->registerNamespace('env', 'http://www.w3.org/2003/05/soap-envelope');
         $this->xpath->registerNamespace('xmlns', 'http://www.sap.com/SBO/DIS');
+
+        $this->checkFaults();
     }
 
     public function getValueByQuery($string) {
@@ -25,12 +27,16 @@ class Response extends \DOMDocument
         return $node;
     }
 
-    public function validate()
+    public function checkFaults()
     {
-        if (parent::validate()) {
+        $faultPath = '//env:Body/env:Fault';
+
+        if ($this->xpath->query('//env:Body/env:Fault')) {
             throw new BadRequestException([
-                "error" => "Validates the document based on its DTD",
-                "value" => ""
+                [
+                    'error' => $this->xpath->query($faultPath.'/env:Reason/env:Text')->item(0)->nodeValue,
+                    'value' => $this->xpath->query($faultPath.'/env:Detail/ErrorList/Error')->item(0)->nodeValue
+                ]
             ]);
         }
     }
