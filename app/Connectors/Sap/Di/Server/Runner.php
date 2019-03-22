@@ -20,18 +20,7 @@ abstract class Runner
     }
 
     /**
-     * @return mixed
-     */
-    protected function getLastKey()
-    {
-        return $this->lastKey;
-    }
-
-    /**
      * @param mixed $lastKey
      */
-    protected function setLastKey($lastKey): void
-    {
-        $this->lastKey = $lastKey;
-    }
+    protected abstract function setLastKey($lastKey): void;
 }

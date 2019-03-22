@@ -4,10 +4,6 @@ use App\Connectors\Sap\Di\Server\Handlers\Request;
 
 class Builder extends Runner
 {
-    protected $client;
-
-    protected $request;
-
     protected $table;
 
     public function __construct(Connector $connector)
@@ -145,5 +141,21 @@ class Builder extends Runner
         }
 
         $this->process();
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getLastKey()
+    {
+        return $this->lastKey;
+    }
+
+    /**
+     * @param mixed $lastKey
+     */
+    protected function setLastKey($lastKey): void
+    {
+        $this->lastKey = $lastKey;
     }
 }
