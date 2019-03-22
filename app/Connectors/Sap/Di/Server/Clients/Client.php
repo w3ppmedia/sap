@@ -45,6 +45,7 @@ class Client implements ClientInterface
     public function sendRequest($xml) {
         $xml = mb_convert_encoding($xml, 'UTF-8', 'UTF-16');
         $response = $this->obj->Interact($xml);
+       
         $this->setResponse($response);
     }
 }

@@ -52,7 +52,7 @@ class Builder extends Runner
         $this->request->withBodyElement('UpdateObject');
         $this->set($data);
 
-        $this->process();
+        $this->process('UpdateObject');
     }
 
     public function set($data = array()) {
