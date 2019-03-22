@@ -32,12 +32,12 @@ class Response extends \DOMDocument
         $faultPath = '//env:Body/env:Fault';
 
         if ($this->xpath->query('//env:Body/env:Fault')->length) {
-            $reason = $this->xpath->query($faultPath.'/env:Detail/ErrorList/Error');
+            $reason = $this->xpath->query($faultPath.'/env:Reason/env:Text');
             $error = $this->xpath->query($faultPath.'/env:Detail/ErrorList/Error');
 
             throw new BadRequestException([
                 [
-                    'error' => $reason->item(0)->nodeValue,
+                    'error' => ($reason->length) ? $reason->item(0)->nodeValue : "",
                     'value' => ($error->length) ? $error->item(0)->nodeValue : ""
                 ]
             ]);
