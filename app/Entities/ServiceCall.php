@@ -8,6 +8,11 @@ class ServiceCall extends BaseEntity
     protected $table = 'ServiceCalls';
 
     /**
+     * @var string
+     */
+    protected $primaryKey = 'ServiceCallID';
+
+    /**
      * @var array
      */
     protected $validation = array(
