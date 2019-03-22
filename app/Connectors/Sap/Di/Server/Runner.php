@@ -6,19 +6,32 @@ abstract class Runner
 
     protected $request;
 
-    public function process() {
+    protected $lastKey;
+
+    public function process($actionType = 'AddObject') {
     	$xml = $this->request->saveXml();
 
     	try {
     		$this->client->sendRequest($xml);
-    		$this->setLastKey($this->client->getResponse()->getValueByQuery('xmlns:AddObjectResponse/xmlns:RetKey'));
+    		$this->setLastKey($this->client->getResponse()->getValueByQuery('xmlns:'.$actionType.'Response/xmlns:RetKey'));
     	} catch (\Exception  $e) {
     		throw $e;
     	}
     }
 
     /**
+     * @return mixed
+     */
+    protected function getLastKey()
+    {
+        return $this->lastKey;
+    }
+
+    /**
      * @param mixed $lastKey
      */
-    protected abstract function setLastKey($lastKey): void;
+    protected function setLastKey($lastKey): void
+    {
+        $this->lastKey = $lastKey;
+    }
 }
