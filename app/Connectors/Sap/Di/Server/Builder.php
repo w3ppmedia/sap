@@ -10,6 +10,8 @@ class Builder extends Runner
 
     protected $table;
 
+    protected $lastKey;
+
     public function __construct(Connector $connector)
     {
         $this->client = $connector->getClient();
@@ -48,6 +50,8 @@ class Builder extends Runner
         $this->set($data);
 
         $this->process();
+
+        return $this->getLastKey();
     }
 
     public function update($data) {
@@ -143,5 +147,21 @@ class Builder extends Runner
         }
 
         $this->process();
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getLastKey()
+    {
+        return $this->lastKey;
+    }
+
+    /**
+     * @param mixed $lastKey
+     */
+    protected function setLastKey($lastKey): void
+    {
+        $this->lastKey = $lastKey;
     }
 }
