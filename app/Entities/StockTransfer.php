@@ -8,6 +8,11 @@ class StockTransfer extends BaseEntity
     protected $table = 'StockTransfer';
 
     /**
+     * @var string
+     */
+    protected $primaryKey = 'AbsEntry';
+
+    /**
      * @var array
      */
     protected $validation = array(

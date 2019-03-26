@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Connectors\Sap\Di\Server\Clients\Client;
 use App\Connectors\Sap\Di\Server\Connector;
 use App\Connectors\Sap\Di\Server\Builder;
+use App\Models\Auth;
 
 class ConnectorConfigServiceProvider extends ServiceProvider
 {

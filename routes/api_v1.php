@@ -33,8 +33,12 @@ Route::put('service-contract', 'ServiceContractController@put');
 Route::post('stock-transfer', 'StockTransferController@post');
 Route::put('stock-transfer', 'StockTransferController@put');
 
+Route::post('generic', 'GenericController@post');
+Route::put('generic', 'GenericController@put');
+
 Route::post('auth/login', 'AuthController@login');
 Route::post('auth/logout', 'AuthController@logout');
+Route::get('auth/session', 'AuthController@session');
 
 
 

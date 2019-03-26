@@ -58,11 +58,12 @@ class Builder extends Runner
     public function set($data = array()) {
         $primaryBusinessObject = $this->request->addToBusinessObject($this->table);
         $row = $this->request->createElement('row');
-
         $primaryBusinessObject->appendChild($row);
 
+        $excludeKey =  array('id', 'DocType', 'ObjectType', 'PrimaryKey');
+
         foreach ($data as $key => $value) {
-            if ($key == 'id' || $key == 'DocType') {
+            if (in_array($key, $excludeKey)) {
                 continue;
             }
 
@@ -141,6 +142,25 @@ class Builder extends Runner
         }
 
         $this->process();
+    }
+
+    public function select(string $sql) {
+        $requestObject = $this->request->addToBodyNS(
+            'http://www.sap.com/SBO/DIS',
+            'dis:ExecuteSQL'
+        );
+
+        $query = $this->request->createElement('DoQuery', $sql);
+        $requestObject->appendChild($query);
+
+        $xml = $this->request->saveXml();
+        
+        try {
+            $this->client->sendRequest($xml);
+            return $this->client->getResponse();
+        } catch (\Exception  $e) {
+            throw $e;
+        }
     }
 
     /**

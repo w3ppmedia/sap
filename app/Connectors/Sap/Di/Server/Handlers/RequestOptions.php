@@ -72,7 +72,7 @@ trait RequestOptions
      */
     public function setQueryParams($params = array()) {
         $this->queryParam = $this->createElement('QueryParams');
-
+        
         foreach ($params as $name => $value) {
             $item = $this->createElement($name, $value);
             $this->queryParam->appendChild($item);

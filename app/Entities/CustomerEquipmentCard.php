@@ -8,6 +8,11 @@ class CustomerEquipmentCard extends BaseEntity
     protected $table = 'CustomerEquipmentCards';
 
     /**
+     * @var string
+     */
+    protected $primaryKey = 'EquipmentCardNum';
+
+    /**
      * @var array
      */
     protected $validation = array(

@@ -6,6 +6,8 @@ use App\Exceptions\BadRequestException;
 use App\Http\Requests\GenericRequest as Request;
 use App\Http\Controllers\Controller;
 
+use Illuminate\Http\Exceptions\HttpResponseException;
+
 class ServiceContractController extends Controller
 {
     private $serviceContractModel;

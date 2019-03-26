@@ -201,6 +201,8 @@ class BaseEntity
     public function update($data) {
         try {
             $this->setAttributes($data);
+
+            $this->preUpdateHook($data);
             $this->save();
             return $this;
         } catch (BadRequestException $e) {
@@ -236,7 +238,7 @@ class BaseEntity
         return Validator::validate($this->getAttributes(), $this->getRules());
     }
 
-    public function preCreateHook($data) {
-        return $data;
-    }
+    public function preCreateHook($data) {}
+
+    public function preUpdateHook($data) {}
 }

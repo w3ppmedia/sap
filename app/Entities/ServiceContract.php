@@ -8,6 +8,11 @@ class ServiceContract extends BaseEntity
     protected $table = 'ServiceContracts';
 
     /**
+     * @var string
+     */
+    protected $primaryKey = 'ContractID';
+
+    /**
      * @var array
      */
     protected $validation = array(

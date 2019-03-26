@@ -8,6 +8,12 @@ class Document extends BaseEntity
     protected $table = 'Documents';
 
     /**
+     * @var string
+     */
+    protected $primaryKey = 'AbsEntry';
+
+
+    /**
      * @var array
      */
     protected $validation = array(
@@ -25,11 +31,11 @@ class Document extends BaseEntity
      * @var array
      */
     public $docs = array(
-        13 => "Invoices",
-        14 => "CreditNotes",
-        15 => "DeliveryNotes",
-        16 => "Returns",
-        17 => "Orders",
+        13 => "Invoices", // correct
+        14 => "CreditNotes", // correct
+        15 => "DeliveryNotes", // correct
+        16 => "Returns", // correct
+        17 => "Orders", // and so on lol
         18 => "PurchaseInvoices",
         19 => "PurchaseCreditNotes",
         20 => "PurchaseDeliveryNotes",

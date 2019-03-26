@@ -4,6 +4,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AuthLoginRequest;
 use App\Http\Requests\AuthLogoutRequest;
 use App\Connectors\Sap\Di\Server\Connector;
+use App\Models\Auth;
+use App\Exceptions\BadRequestException;
+use App\Connectors\Sap\Di\Server\Builder;
+use Illuminate\Container\Container;
+
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AuthController extends Controller
 {
@@ -44,5 +50,19 @@ class AuthController extends Controller
         };
 
         return response()->json(['message' => 'Successfully logged out']);
+    }
+
+    public function session() {
+        try {
+            $db = Container::getInstance()->make(Builder::class);
+            $response = $db->select('SELECT COUNT(CardCode) FROM OCRD'); //you can call sql query on the server, but i haven't expose it to a endpoint
+
+            return response()->json([
+                'code' => 200,
+                'message' => 'Valid Session'
+            ]);
+        } catch (BadRequestException $e) {
+            throw new HttpResponseException(response()->json($e->toArray(), $e->getCode()));
+        }
     }
 }
